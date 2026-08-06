@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>NYC Parking Map</title>
+<meta name="theme-color" content="#0b0b0b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Parking Map">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="map"></div>
+
+  <div id="top-bar">
+    <div id="area-name">Bay Ridge</div>
+    <button id="today-toggle" class="pill" aria-pressed="false">Today's rules</button>
+  </div>
+
+  <div id="legend"></div>
+
+  <div id="status-toast" class="hidden"></div>
+
+  <div id="detail-sheet" class="hidden">
+    <button id="detail-close" aria-label="Close">&times;</button>
+    <div id="detail-content"></div>
+  </div>
+
+  <script src="vendor/leaflet/leaflet.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
