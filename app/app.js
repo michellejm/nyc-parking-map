@@ -125,27 +125,29 @@ function onPositionUpdate(pos) {
   }
 }
 
-function startTracking() {
+function startTracking(shouldFollow) {
   if (!window.isSecureContext) {
-    showStatus("Location needs a secure (https) connection to work in Safari.", 4000);
+    if (shouldFollow) showStatus("Location needs a secure (https) connection to work in Safari.", 4000);
     return;
   }
   if (!navigator.geolocation) {
-    showStatus("Location isn't supported in this browser.", 4000);
+    if (shouldFollow) showStatus("Location isn't supported in this browser.", 4000);
     return;
   }
 
-  showStatus("Locating…");
-  followMode = true;
-  if (locateButtonEl) locateButtonEl.classList.add("active");
+  if (shouldFollow) showStatus("Locating…");
+  followMode = shouldFollow;
+  if (shouldFollow && locateButtonEl) locateButtonEl.classList.add("active");
   watchId = navigator.geolocation.watchPosition(onPositionUpdate, (err) => {
-    let msg = "Couldn't get your location.";
-    if (err.code === err.PERMISSION_DENIED) {
-      msg = "Location permission denied — enable it in Settings > Privacy > Location Services > Safari Websites.";
-    } else if (err.code === err.TIMEOUT) {
-      msg = "Timed out getting your location.";
+    if (shouldFollow) {
+      let msg = "Couldn't get your location.";
+      if (err.code === err.PERMISSION_DENIED) {
+        msg = "Location permission denied — enable it in Settings > Privacy > Location Services > Safari Websites.";
+      } else if (err.code === err.TIMEOUT) {
+        msg = "Timed out getting your location.";
+      }
+      showStatus(msg, 5000);
     }
-    showStatus(msg, 5000);
     stopTracking();
   }, { enableHighAccuracy: true, maximumAge: 2000, timeout: 15000 });
 }
@@ -162,7 +164,7 @@ function stopTracking() {
 function toggleLocate(button) {
   locateButtonEl = button;
   if (watchId === null) {
-    startTracking();
+    startTracking(true);
   } else if (!followMode) {
     // tracking but user panned away — tapping again resumes following
     followMode = true;
@@ -262,4 +264,4 @@ if ("serviceWorker" in navigator) {
 }
 
 locateButtonEl = document.querySelector(".locate-button");
-startTracking();
+startTracking(false);

@@ -1,4 +1,4 @@
-const CACHE_VERSION = "v5";
+const CACHE_VERSION = "v6";
 const APP_SHELL_CACHE = `parking-map-shell-${CACHE_VERSION}`;
 const TILE_CACHE = "parking-map-tiles";
 
