@@ -295,7 +295,7 @@ def build_geojson(bbox, borough, area_name):
 
 if __name__ == "__main__":
     # Bay Ridge + Fort Hamilton, south to the Verrazzano-Narrows Bridge / Army base.
-    BAY_RIDGE_BBOX = (40.596, 40.643, -74.035, -74.000)  # lat_min, lat_max, lon_min, lon_max
+    BAY_RIDGE_BBOX = (40.596, 40.643, -74.045, -74.000)  # lat_min, lat_max, lon_min, lon_max
     fc = build_geojson(BAY_RIDGE_BBOX, "Brooklyn", "Bay Ridge / Fort Hamilton")
     with open("data/bayridge.geojson", "w") as f:
         json.dump(fc, f)
