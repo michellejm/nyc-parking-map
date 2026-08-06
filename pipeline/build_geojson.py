@@ -174,6 +174,7 @@ CANONICAL_PAIRS = {
     "WED_THU": frozenset({"WED", "THU"}),
     "WED_FRI": frozenset({"WED", "FRI"}),
     "THU_FRI": frozenset({"THU", "FRI"}),
+    "MON_THU": frozenset({"MON", "THU"}),
 }
 DAILY_SET = frozenset({"MON", "TUE", "WED", "THU", "FRI", "SAT"})
 
@@ -183,11 +184,13 @@ ZONE_COLORS = {
     "WED_FRI": "#eb6834",
     "THU_FRI": "#4a3aa7",
     "DAILY": "#e87ba4",
+    "MON_THU": "#eda100",
     "OTHER": "#898781",
 }
 ZONE_LABELS = {
     "MON_TUE": "Mon/Tue", "WED_THU": "Wed/Thu", "WED_FRI": "Wed/Fri",
-    "THU_FRI": "Thu/Fri", "DAILY": "Daily (except Sun)", "OTHER": "Other",
+    "THU_FRI": "Thu/Fri", "DAILY": "Daily (except Sun)", "MON_THU": "Mon/Thu",
+    "OTHER": "Other",
 }
 
 
@@ -291,8 +294,9 @@ def build_geojson(bbox, borough, area_name):
 
 
 if __name__ == "__main__":
-    BAY_RIDGE_BBOX = (40.612, 40.643, -74.035, -74.007)  # lat_min, lat_max, lon_min, lon_max
-    fc = build_geojson(BAY_RIDGE_BBOX, "Brooklyn", "Bay Ridge")
+    # Bay Ridge + Fort Hamilton, south to the Verrazzano-Narrows Bridge / Army base.
+    BAY_RIDGE_BBOX = (40.596, 40.643, -74.035, -74.000)  # lat_min, lat_max, lon_min, lon_max
+    fc = build_geojson(BAY_RIDGE_BBOX, "Brooklyn", "Bay Ridge / Fort Hamilton")
     with open("data/bayridge.geojson", "w") as f:
         json.dump(fc, f)
     print("Wrote data/bayridge.geojson", file=sys.stderr)

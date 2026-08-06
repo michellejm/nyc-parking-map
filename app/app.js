@@ -1,16 +1,16 @@
 const ZONE_LABELS = {
   MON_TUE: "Mon/Tue", WED_THU: "Wed/Thu", WED_FRI: "Wed/Fri",
-  THU_FRI: "Thu/Fri", DAILY: "Daily (except Sun)", OTHER: "Other",
+  THU_FRI: "Thu/Fri", DAILY: "Daily (except Sun)", MON_THU: "Mon/Thu", OTHER: "Other",
 };
 const ZONE_COLORS = {
   MON_TUE: "#2a78d6", WED_THU: "#e34948", WED_FRI: "#eb6834",
-  THU_FRI: "#4a3aa7", DAILY: "#e87ba4", OTHER: "#898781",
+  THU_FRI: "#4a3aa7", DAILY: "#e87ba4", MON_THU: "#eda100", OTHER: "#898781",
 };
-const ZONE_ORDER = ["MON_TUE", "WED_THU", "WED_FRI", "THU_FRI", "DAILY", "OTHER"];
+const ZONE_ORDER = ["MON_TUE", "WED_THU", "WED_FRI", "THU_FRI", "MON_THU", "DAILY", "OTHER"];
 const TODAY_ABBR = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"][new Date().getDay()];
 
 const map = L.map("map", { zoomControl: false, attributionControl: true })
-  .setView([40.6275, -74.021], 15);
+  .setView([40.622, -74.018], 14);
 
 L.control.zoom({ position: "bottomright" }).addTo(map);
 
@@ -232,6 +232,9 @@ fetch("data/bayridge.geojson")
         layer.on("click", () => openDetail(feature.properties));
       },
     }).addTo(map);
+    if (!hasCenteredOnUser) {
+      map.fitBounds(geoLayer.getBounds(), { padding: [20, 20] });
+    }
   });
 
 document.getElementById("detail-close").addEventListener("click", () => {
