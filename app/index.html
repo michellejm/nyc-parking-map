@@ -18,7 +18,22 @@
 
   <div id="top-bar">
     <div id="area-name">Bay Ridge / Fort Hamilton</div>
-    <button id="today-toggle" class="pill" aria-pressed="false">Today's rules</button>
+    <button id="day-filter-toggle" class="pill" aria-pressed="false" aria-expanded="false">Days</button>
+  </div>
+
+  <div id="day-filter-panel" class="hidden">
+    <div id="day-chips">
+      <button class="day-chip" data-day="MON">Mon</button>
+      <button class="day-chip" data-day="TUE">Tue</button>
+      <button class="day-chip" data-day="WED">Wed</button>
+      <button class="day-chip" data-day="THU">Thu</button>
+      <button class="day-chip" data-day="FRI">Fri</button>
+      <button class="day-chip" data-day="SAT">Sat</button>
+    </div>
+    <div id="day-filter-actions">
+      <button id="day-filter-today" class="text-button">Today</button>
+      <button id="day-filter-clear" class="text-button">Clear</button>
+    </div>
   </div>
 
   <div id="legend"></div>

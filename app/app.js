@@ -21,7 +21,6 @@ L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
 }).addTo(map);
 
 let geoLayer = null;
-let todayMode = false;
 
 let statusTimer = null;
 function showStatus(message, autoHideMs) {
@@ -193,19 +192,74 @@ function baseStyle(feature) {
   };
 }
 
-function applyTodayMode() {
+const selectedDays = new Set();
+
+function applyDayFilter() {
   if (!geoLayer) return;
   geoLayer.eachLayer((layer) => {
-    const isToday = layer.feature.properties.all_days.includes(TODAY_ABBR);
-    if (!todayMode) {
+    if (selectedDays.size === 0) {
       layer.setStyle({ opacity: 0.85, weight: 4 });
-    } else {
-      layer.setStyle(
-        isToday ? { opacity: 1, weight: 6 } : { opacity: 0.12, weight: 3 }
-      );
+      return;
     }
+    const matches = layer.feature.properties.all_days.some((d) => selectedDays.has(d));
+    layer.setStyle(matches ? { opacity: 1, weight: 6 } : { opacity: 0.12, weight: 3 });
   });
 }
+
+function updateDayFilterButtonLabel() {
+  const button = document.getElementById("day-filter-toggle");
+  if (selectedDays.size === 0) {
+    button.textContent = "Days";
+    button.setAttribute("aria-pressed", "false");
+  } else {
+    const order = ["MON", "TUE", "WED", "THU", "FRI", "SAT"];
+    const label = order.filter((d) => selectedDays.has(d))
+      .map((d) => d[0] + d.slice(1, 3).toLowerCase())
+      .join("/");
+    button.textContent = label;
+    button.setAttribute("aria-pressed", "true");
+  }
+}
+
+function toggleDay(day, chipEl) {
+  if (selectedDays.has(day)) {
+    selectedDays.delete(day);
+    chipEl.classList.remove("selected");
+  } else {
+    selectedDays.add(day);
+    chipEl.classList.add("selected");
+  }
+  updateDayFilterButtonLabel();
+  applyDayFilter();
+}
+
+document.querySelectorAll(".day-chip").forEach((chip) => {
+  chip.addEventListener("click", () => toggleDay(chip.dataset.day, chip));
+});
+
+document.getElementById("day-filter-toggle").addEventListener("click", (e) => {
+  const panel = document.getElementById("day-filter-panel");
+  const isHidden = panel.classList.toggle("hidden");
+  e.target.setAttribute("aria-expanded", String(!isHidden));
+});
+
+document.getElementById("day-filter-clear").addEventListener("click", () => {
+  selectedDays.clear();
+  document.querySelectorAll(".day-chip.selected").forEach((c) => c.classList.remove("selected"));
+  updateDayFilterButtonLabel();
+  applyDayFilter();
+});
+
+document.getElementById("day-filter-today").addEventListener("click", () => {
+  selectedDays.clear();
+  document.querySelectorAll(".day-chip").forEach((c) => {
+    const isToday = c.dataset.day === TODAY_ABBR;
+    c.classList.toggle("selected", isToday);
+    if (isToday) selectedDays.add(TODAY_ABBR);
+  });
+  updateDayFilterButtonLabel();
+  applyDayFilter();
+});
 
 function scheduleRowsHtml(props) {
   return props.schedules
@@ -241,12 +295,6 @@ fetch("data/bayridge.geojson")
 
 document.getElementById("detail-close").addEventListener("click", () => {
   document.getElementById("detail-sheet").classList.add("hidden");
-});
-
-document.getElementById("today-toggle").addEventListener("click", (e) => {
-  todayMode = !todayMode;
-  e.target.setAttribute("aria-pressed", String(todayMode));
-  applyTodayMode();
 });
 
 function buildLegend() {
