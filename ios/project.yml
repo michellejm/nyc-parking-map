@@ -1,0 +1,32 @@
+name: ParkingMap
+options:
+  bundleIdPrefix: com.parkingmap
+  deploymentTarget:
+    iOS: "16.0"
+targets:
+  ParkingMap:
+    type: application
+    platform: iOS
+    sources:
+      - path: ParkingMap/Sources
+      - path: ParkingMap/Resources/WebApp
+        type: folder
+      - path: ParkingMap/Assets.xcassets
+    info:
+      path: Generated/Info.plist
+      properties:
+        CFBundleDisplayName: Parking Map
+        NSLocationWhenInUseUsageDescription: "Parking Map uses your location to show where you are and highlight nearby streets while you drive."
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UIStatusBarHidden: true
+        UIViewControllerBasedStatusBarAppearance: false
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.parkingmap.bayridge
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        TARGETED_DEVICE_FAMILY: "1"
+        CODE_SIGN_STYLE: Automatic
+        SWIFT_VERSION: "5.0"
+        IPHONEOS_DEPLOYMENT_TARGET: "16.0"
